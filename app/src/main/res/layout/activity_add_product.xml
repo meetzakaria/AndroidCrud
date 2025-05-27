@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.addProductActivity">
+    tools:context=".activity.addProductActivity"
+    tools:ignore="ExtraText">
 
 
     <EditText
@@ -82,6 +83,28 @@
         app:layout_constraintTop_toBottomOf="@+id/StockQuantity" />
 
     <Button
+        android:id="@+id/btnChooseFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose File"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/category"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/selectedFileText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No file selected"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnChooseFile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    <Button
         android:id="@+id/btnSave"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -91,6 +114,6 @@
         android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/category" />
+        app:layout_constraintTop_toBottomOf="@+id/selectedFileText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
