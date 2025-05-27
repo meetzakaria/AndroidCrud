@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">AndroidCrud</string>
+    <string name="product_list">Product List</string>
+    <string name="add_product">Add Product</string>
+    <string name="crud_operation">Crud Operation</string>
+    <string name="first_android_application">First Android Application</string>
+    <string name="ProductName">Product Name</string>
+    <string name="Description">Description</string>
+    <string name="Price">Price</string>
+    <string name="Stock_Quantity">StockQuantity</string>
+    <string name="save">save</string>
+    <string name="Category">Category</string>
+</resources>
