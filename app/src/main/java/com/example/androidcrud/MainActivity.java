@@ -10,7 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.androidcrud.activity.addProductActivity;
+import com.example.androidcrud.activity.AddProductActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void navigateToAddProductPage() {
-        Intent intent = new Intent(MainActivity.this, addProductActivity.class);
+        Intent intent = new Intent(MainActivity.this, AddProductActivity.class);
         startActivity(intent);
     }
 

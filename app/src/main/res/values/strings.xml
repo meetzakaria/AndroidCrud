@@ -11,4 +11,6 @@
     <string name="save">save</string>
     <string name="Category">Category</string>
     <string name="product_image">product_image</string>
+    <string name="choose_file">Choose File</string>
+    <string name="no_file_selected">No file selected</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.androidcrud.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,14 +31,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         ImageView productImage;
         TextView productName, productPrice, productCategory, productDescription, productQuantity;
 
+        @SuppressLint("WrongViewCast")
         public ProductViewHolder(View itemView) {
             super(itemView);
-            productImage = itemView.findViewById(R.id.productImage);
-            productName = itemView.findViewById(R.id.productName);
-            productPrice = itemView.findViewById(R.id.productPrice);
-            productCategory = itemView.findViewById(R.id.productCategory);
-            productDescription = itemView.findViewById(R.id.productDescription);
-            productQuantity = itemView.findViewById(R.id.productQuantity);
+            productImage = itemView.findViewById(R.id.btnChooseFile);
+            productName = itemView.findViewById(R.id.ProductName);
+            productPrice = itemView.findViewById(R.id.Price);
+            productCategory = itemView.findViewById(R.id.category);
+            productDescription = itemView.findViewById(R.id.Description);
+            productQuantity = itemView.findViewById(R.id.StockQuantity);
         }
     }
 

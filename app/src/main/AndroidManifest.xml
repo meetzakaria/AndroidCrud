@@ -21,7 +21,7 @@
             android:exported="false" />
         <!-- AddProductActivity -->
         <activity
-            android:name=".activity.addProductActivity"
+            android:name=".activity.AddProductActivity"
             android:exported="false" /> <!-- MainActivity (launcher) -->
         <activity
             android:name=".MainActivity"
