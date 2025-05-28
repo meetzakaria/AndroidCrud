@@ -76,7 +76,7 @@ public class AddProductActivity extends AppCompatActivity {
 
         // Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.30.96.1:8081/")
+                .baseUrl("http://10.0.0.100:8081/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiService = retrofit.create(ApiService.class);
@@ -125,7 +125,7 @@ public class AddProductActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<Product> call, @NonNull Throwable t) {
-                Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddProductActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

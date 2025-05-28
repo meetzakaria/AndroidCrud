@@ -15,7 +15,7 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @POST("Product")
+    @POST("/api/products")
     Call<Product> saveProduct(@Body Product product);
 
     @GET("Product")
@@ -29,4 +29,5 @@ public interface ApiService {
 
     @DELETE("Product/{id}")
     Call<Void> deleteProduct(@Path("id") int id);
+
 }
