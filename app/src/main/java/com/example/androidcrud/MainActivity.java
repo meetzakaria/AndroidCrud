@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.androidcrud.activity.AddProductActivity;
+import com.example.androidcrud.activity.ProductListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,22 +41,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToProductListPage() {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
-//        startActivity(intent);
+    Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
+        startActivity(intent);
     }
 
 }

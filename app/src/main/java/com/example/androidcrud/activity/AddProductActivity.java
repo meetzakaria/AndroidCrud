@@ -23,6 +23,8 @@ import com.example.androidcrud.R;
 import com.example.androidcrud.model.Product;
 import com.example.androidcrud.service.ApiService;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,7 +78,8 @@ public class AddProductActivity extends AppCompatActivity {
 
         // Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.0.100:8081/")
+//                .baseUrl("http://10.0.0.100:8081/")
+                .baseUrl("http://192.168.0.119:8081/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiService = retrofit.create(ApiService.class);
@@ -88,35 +91,35 @@ public class AddProductActivity extends AppCompatActivity {
         String productName = ProductName.getText().toString().trim();
         String description = Description.getText().toString().trim();
         String selectedCategory = categorySpinner.getSelectedItem().toString();
-        double price;
-        int quantity;
+        String price = Price.getText().toString().trim();
+        String quantity = StockQuantity.getText().toString().trim();
 
-        try {
-            price = Double.parseDouble(Price.getText().toString().trim());
-            quantity = Integer.parseInt(StockQuantity.getText().toString().trim());
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Please enter valid price and quantity.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        File file = new File("path/to/image.jpg");
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+//        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
-        Product product = new Product();
-        if (isEditMode) {
-            product.setId((long) ProductId);
-        }
-        product.setName(productName);
-        product.setDescription(description);
-        product.setCategory(selectedCategory);
-        product.setPrice(price);
-        product.setQuantity(quantity);
+        RequestBody nameBody = RequestBody.create(MediaType.parse("text/plain"), productName);
+        RequestBody descriptionBody = RequestBody.create(MediaType.parse("text/plain"), description);
+        RequestBody priceBody = RequestBody.create(MediaType.parse("text/plain"), price);
+        RequestBody quantityBody = RequestBody.create(MediaType.parse("text/plain"), quantity);
+        RequestBody categoryBody = RequestBody.create(MediaType.parse("text/plain"), selectedCategory);
 
-        Call<Product> call = apiService.saveProduct(product);
+        Call<Product> call = apiService.saveProduct(
+                nameBody,
+                descriptionBody,
+                priceBody,
+                quantityBody,
+                categoryBody,
+                null
+        );
+
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(AddProductActivity.this, "Product saved successfully!", Toast.LENGTH_SHORT).show();
                     clearForm();
-//                    startActivity(new Intent(AddProductActivity.this, ProductListActivity.class));
+                    startActivity(new Intent(AddProductActivity.this, ProductListActivity.class));
                     finish();
                 } else {
                     Toast.makeText(AddProductActivity.this, "Failed to save Product: " + response.message(), Toast.LENGTH_SHORT).show();

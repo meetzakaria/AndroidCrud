@@ -9,10 +9,23 @@ public class Product {
     private String category;
     private byte[] image;
 
-
+    // Default Constructor
     public Product() {
     }
 
+    // Parameterized Constructor (for manual object creation)
+    public Product(Long id, String name, String description, Double price,
+                   Integer quantity, String category, byte[] image) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+        this.image = image;
+    }
+
+    // Getters & Setters
     public Long getId() {
         return id;
     }
