@@ -15,7 +15,7 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @POST("/api/products")
+    @POST("/api/products/add")
     Call<Product> saveProduct(@Body Product product);
 
     @GET("Product")
