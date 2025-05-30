@@ -31,10 +31,10 @@ import retrofit2.Response;
 
 public class ProductListActivity extends AppCompatActivity {
 
-    private static final String TAG = "Product List Activity";
+    private static final String TAG = "ProductListActivity";
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
-    private List<Product> ProductList = new ArrayList<>();
+    private List<Product> productList = new ArrayList<>();
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -42,6 +42,7 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_product_list);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -52,13 +53,13 @@ public class ProductListActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        productAdapter = new ProductAdapter(this, ProductList);
         recyclerView = findViewById(R.id.ProductRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        productAdapter = new ProductAdapter(this, productList);
         recyclerView.setAdapter(productAdapter);
 
         fetchProduct();
-
     }
 
     @Override
@@ -77,14 +78,13 @@ public class ProductListActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Product> newProducts = response.body();
 
-                    // Efficient RecyclerView update using DiffUtil
                     DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
-                            new ProductDiffCallback(ProductList, newProducts)
+                            new ProductDiffCallback(productList, newProducts)
                     );
 
-                    ProductList.clear();
-                    ProductList.addAll(newProducts);
-                    diffResult.dispatchUpdatesTo(productAdapter); // ✅ use the correct adapter
+                    productList.clear();
+                    productList.addAll(newProducts);
+                    diffResult.dispatchUpdatesTo(productAdapter);
 
                     Log.d(TAG, "Product list updated. Total: " + newProducts.size());
                 } else {
@@ -101,9 +101,7 @@ public class ProductListActivity extends AppCompatActivity {
         });
     }
 
-
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
 }

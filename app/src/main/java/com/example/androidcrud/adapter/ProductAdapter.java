@@ -1,21 +1,32 @@
 package com.example.androidcrud.adapter;
 
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidcrud.R;
 import com.example.androidcrud.model.Product;
+import com.google.gson.Gson;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
@@ -31,26 +42,26 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         ImageView productImage;
         TextView productName, productPrice, productCategory, productDescription, productQuantity;
 
-        @SuppressLint("WrongViewCast")
-        public ProductViewHolder(View itemView) {
+        public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            productImage = itemView.findViewById(R.id.btnChooseFile);
-            productName = itemView.findViewById(R.id.ProductName);
-            productPrice = itemView.findViewById(R.id.Price);
-            productCategory = itemView.findViewById(R.id.category);
-            productDescription = itemView.findViewById(R.id.Description);
-            productQuantity = itemView.findViewById(R.id.StockQuantity);
+            productImage = itemView.findViewById(R.id.productImage);
+            productName = itemView.findViewById(R.id.productName);
+            productPrice = itemView.findViewById(R.id.productPrice);
+            productCategory = itemView.findViewById(R.id.productCategory);
+            productDescription = itemView.findViewById(R.id.productDescription);
+            productQuantity = itemView.findViewById(R.id.productQuantity);
         }
     }
 
+    @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.product_item, parent, false);
         return new ProductViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ProductViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
 
         holder.productName.setText(product.getName());
@@ -59,16 +70,76 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.productDescription.setText(product.getDescription());
         holder.productQuantity.setText("Quantity: " + product.getQuantity());
 
-        if (product.getImage() != null) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(product.getImage(), 0, product.getImage().length);
-            holder.productImage.setImageBitmap(bitmap);
+        // ✅ Image loading from Base64
+        if (product.getImage() != null && !product.getImage().isEmpty()) {
+            try {
+                byte[] decodedBytes = Base64.decode(product.getImage(), Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                holder.productImage.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                holder.productImage.setImageResource(R.drawable.ic_placeholder); // fallback
+            }
         } else {
             holder.productImage.setImageResource(R.drawable.ic_placeholder);
         }
+
+        holder.updateButton.setOnClickListener(v -> {
+            Log.d("Update", "Update clicked for " + employee.getName());
+            Intent intent = new Intent(context, AddEmployeeActivity.class);
+            intent.putExtra("employee", new Gson().toJson(employee));
+            context.startActivity(intent);
+        });
+
+        holder.deleteButton.setOnClickListener(v -> {
+            Log.d("Delete", "Delete clicked for " + employee.getName());
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete")
+                    .setMessage("Are you sure you want to delete " + employee.getName() + "?")
+                    .setPositiveButton("Yes",
+                            (dialog, which) -> apiService.deleteEmployee(employee.getId())
+                                    .enqueue(new Callback<>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                            if (response.isSuccessful()) {
+                                                int adapterPosition = holder.getAdapterPosition();
+                                                if (adapterPosition != RecyclerView.NO_POSITION) {
+                                                    employeeList.remove(adapterPosition);
+                                                    notifyItemRemoved(adapterPosition);
+                                                    notifyItemRangeChanged(adapterPosition, employeeList.size());
+                                                    Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                            Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
     }
+
 
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    public static class EmployeeViewHolder extends RecyclerView.ViewHolder {
+        TextView nameText, emailText, designationText;
+        ImageButton updateButton, deleteButton;
+
+        public EmployeeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            nameText = itemView.findViewById(R.id.nameText);
+            emailText = itemView.findViewById(R.id.emailText);
+            designationText = itemView.findViewById(R.id.designationText);
+            updateButton = itemView.findViewById(R.id.updateButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
+        }
     }
 }

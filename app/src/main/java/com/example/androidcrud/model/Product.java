@@ -7,7 +7,8 @@ public class Product {
     private Double price;
     private Integer quantity;
     private String category;
-    private byte[] image;
+    private String image;
+
 
     // Default Constructor
     public Product() {
@@ -15,7 +16,7 @@ public class Product {
 
     // Parameterized Constructor (for manual object creation)
     public Product(Long id, String name, String description, Double price,
-                   Integer quantity, String category, byte[] image) {
+                   Integer quantity, String category, String image) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -74,11 +75,12 @@ public class Product {
         this.category = category;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
+
 }

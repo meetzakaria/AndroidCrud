@@ -44,4 +44,5 @@ public interface ApiService {
     @DELETE("api/products/{id}")
     Call<Void> deleteProduct(@Path("id") int id);
 
+    Call<Product> saveProduct(Product product);
 }

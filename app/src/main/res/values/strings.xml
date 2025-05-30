@@ -13,4 +13,6 @@
     <string name="product_image">product_image</string>
     <string name="choose_file">Choose File</string>
     <string name="no_file_selected">No file selected</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
 </resources>
