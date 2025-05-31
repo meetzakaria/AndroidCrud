@@ -83,7 +83,8 @@ public class AddProductActivity extends AppCompatActivity {
 
         // Retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.0.100:8081/")
+//                .baseUrl("http://10.0.0.100:8081/")
+                .baseUrl("http://192.168.0.119:8081/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiService = retrofit.create(ApiService.class);
