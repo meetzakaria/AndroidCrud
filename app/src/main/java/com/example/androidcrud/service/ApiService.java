@@ -42,7 +42,7 @@ public interface ApiService {
     Call<Product> updateProduct(@Path("id") int id, @Body Product Product);
 
     @DELETE("api/products/{id}")
-    Call<Void> deleteProduct(@Path("id") int id);
+    Call<Void> deleteProduct(@Path("id") long id);
 
     Call<Product> saveProduct(Product product);
 }

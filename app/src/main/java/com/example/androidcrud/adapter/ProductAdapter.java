@@ -19,7 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidcrud.R;
+import com.example.androidcrud.activity.AddProductActivity;
 import com.example.androidcrud.model.Product;
+import com.example.androidcrud.service.ApiService;
+import com.example.androidcrud.util.ApiClient;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -32,15 +35,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private List<Product> productList;
     private Context context;
+    private ApiService apiService;
 
     public ProductAdapter(Context context, List<Product> productList) {
         this.context = context;
         this.productList = productList;
+        this.apiService = ApiClient.getApiService();
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
         TextView productName, productPrice, productCategory, productDescription, productQuantity;
+        ImageButton updateButton, deleteButton;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -50,6 +56,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             productCategory = itemView.findViewById(R.id.productCategory);
             productDescription = itemView.findViewById(R.id.productDescription);
             productQuantity = itemView.findViewById(R.id.productQuantity);
+            updateButton = itemView.findViewById(R.id.updateButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
@@ -83,44 +91,45 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.productImage.setImageResource(R.drawable.ic_placeholder);
         }
 
-//        holder.updateButton.setOnClickListener(v -> {
-//            Log.d("Update", "Update clicked for " + employee.getName());
-//            Intent intent = new Intent(context, AddEmployeeActivity.class);
-//            intent.putExtra("employee", new Gson().toJson(employee));
+        holder.updateButton.setOnClickListener(v -> {
+            Log.d("Update", "Update clicked for " + product.getName());
+            Toast.makeText(context, "Update button clicked ", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(context, AddProductActivity.class);
+//            intent.putExtra("employee", new Gson().toJson(product));
 //            context.startActivity(intent);
-//        });
+        });
 
-//        holder.deleteButton.setOnClickListener(v -> {
-//            Log.d("Delete", "Delete clicked for " + employee.getName());
-//            new AlertDialog.Builder(context)
-//                    .setTitle("Delete")
-//                    .setMessage("Are you sure you want to delete " + employee.getName() + "?")
-//                    .setPositiveButton("Yes",
-//                            (dialog, which) -> apiService.deleteEmployee(employee.getId())
-//                                    .enqueue(new Callback<>() {
-//                                        @Override
-//                                        public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-//                                            if (response.isSuccessful()) {
-//                                                int adapterPosition = holder.getAdapterPosition();
-//                                                if (adapterPosition != RecyclerView.NO_POSITION) {
-//                                                    employeeList.remove(adapterPosition);
-//                                                    notifyItemRemoved(adapterPosition);
-//                                                    notifyItemRangeChanged(adapterPosition, employeeList.size());
-//                                                    Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            } else {
-//                                                Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//
-//                                        @Override
-//                                        public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-//                                            Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }))
-//                    .setNegativeButton("Cancel", null)
-//                    .show();
-//        });
+        holder.deleteButton.setOnClickListener(v -> {
+            Log.d("Delete", "Delete clicked for " + product.getName());
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete")
+                    .setMessage("Are you sure you want to delete " + product.getName() + "?")
+                    .setPositiveButton("Yes",
+                            (dialog, which) -> apiService.deleteProduct(product.getId())
+                                    .enqueue(new Callback<>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                            if (response.isSuccessful()) {
+                                                int adapterPosition = holder.getAdapterPosition();
+                                                if (adapterPosition != RecyclerView.NO_POSITION) {
+                                                    productList.remove(adapterPosition);
+                                                    notifyItemRemoved(adapterPosition);
+                                                    notifyItemRangeChanged(adapterPosition, productList.size());
+                                                    Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                            Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
     }
 
 

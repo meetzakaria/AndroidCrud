@@ -82,7 +82,8 @@ public class AddProductActivity extends AppCompatActivity {
 
         // Retrofit initialization
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.119:8081/") // change IP as needed
+//                .baseUrl("http://192.168.0.119:8081/") // change IP as needed
+                .baseUrl("http://192.168.53.45:8081/") // change IP as needed
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
